@@ -2,21 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UI : MonoBehaviour
 {
-    Vector2 v_Init_Pos;
-    float   f_Stand_Size  = 1.5f;
-    static string FILE_PASH = "Sprite/Player/Constellation/";
 
     /*==============================================================*/
     //初期化
     /*==============================================================*/
     void Start()
     {
-        v_Init_Pos.x    = -70.0f;
-        v_Init_Pos.y    = 100.0f;
     }
 
     //ダブルクリック用
@@ -64,7 +58,7 @@ public class UI : MonoBehaviour
         }
 
         CreateStand();
-        CreateAnime();
+        CreateAnime(this.GetComponent<SpriteRenderer>().sprite);
     }
 
     private enum ConstellationState
@@ -86,19 +80,16 @@ public class UI : MonoBehaviour
     }
 
 
-
-    void CreateAnime()
+    public void CreateAnime(Sprite _sprite)
     {
-        GameObject create_obj = GameObject.Find("Anime");
-        Sprite s_now_sprite = this.GetComponent<SpriteRenderer>().sprite;
+        Sprite s_now_sprite = _sprite;
         string s_for_work = s_now_sprite.ToString();
+        //数値の切り取り
         s_for_work = s_for_work.Substring(14, 1);
 
-        //create_obj.GetComponent<Anima>().ChangeAnime(int.Parse(s_for_work));
+        GameObject create_obj = GameObject.Find("Anime");
         create_obj.GetComponent<SpriteChange>().SharingState(int.Parse(s_for_work));
         create_obj.GetComponent<Animator>().Play("Move");
-        //create_obj.GetComponent<Anima>().Test();
-
     }
 
     /*==============================================================*/
