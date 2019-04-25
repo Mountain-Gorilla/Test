@@ -2,114 +2,150 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class Cursor : MonoBehaviour
 {
-    public Sprite[] Constellation;
-    int CONSTELLATION_MAX = 12;
 
-    public static int[] a = new int[3];
-    static int Get(int _i)
-    {
-        return a[_i];
-    }
+    public　Sprite[]    Constellation;
+
+    Vector3             RIGHT       = new Vector3(0.4f, 0, 0);
+    Vector3             LEFT        = new Vector3(-0.4f, 0, 0);
+
+    Vector3             MAX_SCALE   = new Vector3(1.4f, 1.4f, 1.0f);
+    Vector3             MIN_SCALE   = new Vector3(1.0f, 1.0f, 1.0f);
+
+    //空のスプライト
+    Sprite              Sprite_None;
+
+    Transform           Trans;
+    GameObject          g_Other;                //Cursorの左側
+
+    int                 NowCursor           = 0;
+    int                 CONSTELLATION_MAX   = 12;
+
+    public static int[] Ability = new int[3];
+    /*========================================*/
+    //プレイヤーに渡す選択情報
+    //引数     :ほしい配列の番号
+    //戻り値   :能力にあった数値
+    /*========================================*/
+    public static int GetAbility(int _num){ return Ability[_num]; }
+
     private enum ConstellationState
     {
         Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra,
         Scorpio, Sagittarius, Capricorn, Aquarius, Pisces, Sortie,None
     }
-    int[] i_test;
+
     private enum Command
     {
         Z,X,C,None
     }
 
-    Transform Trans;
-    int NowCursor = 0;
     void Start()
     {
         Trans = GetComponent<Transform>();
-        //i_test;
+        g_Other = Find("Other");
     }
 
     void Update()
     {
-        Check();
-        if(PushKey(KeyCode.LeftArrow)){
-            NowCursor -= 1;
-        }
-        if(PushKey(KeyCode.RightArrow)){
-            NowCursor += 1;
-        }
-        if(PushKey(KeyCode.DownArrow)){
-            NowCursor += 4;
-        }
-        if(PushKey(KeyCode.UpArrow)){
-            NowCursor -= 4;
-        }
+        Check();      
 
-        if(NowCursor>=CONSTELLATION_MAX){
-            NowCursor -= CONSTELLATION_MAX;
-        }
-        if(NowCursor<0){
-            NowCursor += CONSTELLATION_MAX;
-        }
-
-
-
-        //数字に合うEnumの名前を持ってくる
-        //その名前の場所に移動させる
-        string s_now_num = Enum.GetName(typeof(ConstellationState), NowCursor); 
-        GameObject g_test = GameObject.Find(s_now_num);
-        Trans.position = g_test.GetComponent<Transform>().position;
-
-        Pos();
+        Move();
 
         if (PushKey(KeyCode.Return)){
             SetSprite();
         }
     }
 
-    public float Wight = 0;
-    public float Height = 0;
-    private void Pos()
+
+    private void Move()
     {
-        if (NowCursor == 12)
+        if (PushKey(KeyCode.LeftArrow))
         {
-            Trans.localScale = new Vector3(Wight, Height, 0);
+            NowCursor -= 1;
+        }
+        if (PushKey(KeyCode.RightArrow))
+        {
+            NowCursor += 1;
+        }
+        if (PushKey(KeyCode.DownArrow))
+        {
+            NowCursor += 4;
+        }
+        if (PushKey(KeyCode.UpArrow))
+        {
+            NowCursor -= 4;
+        }
+
+        if (NowCursor >= CONSTELLATION_MAX)
+        {
+            NowCursor -= CONSTELLATION_MAX;
+        }
+        if (NowCursor < 0)
+        {
+            NowCursor += CONSTELLATION_MAX;
+        }
+
+        //数字に合うEnumの名前を持ってくる
+        //その名前の場所に移動させる
+        string s_ability = Enum.GetName(typeof(ConstellationState), NowCursor);
+        GameObject g_ability = GameObject.Find(s_ability);
+        Vector3 v_icon = g_ability.GetComponent<Transform>().position;
+
+        if(NowCursor==12)
+        {
+            Trans.position = v_icon + RIGHT * 4.0f;
+            g_Other.transform.position = v_icon += LEFT * 4.0f;
+
+            Trans.localScale = MAX_SCALE;
+            g_Other.transform.localScale = MAX_SCALE;
+        }
+        else
+        {
+            Trans.position = v_icon + RIGHT;
+            g_Other.transform.position = v_icon += LEFT;
+
+            Trans.localScale = MIN_SCALE;
+            g_Other.transform.localScale = MIN_SCALE;
+
         }
     }
 
 
     void Scene()
     {
+        if (NowCursor != 12) return;
+
         for (int i_Cnt = 0; i_Cnt < 3; i_Cnt++)
         {
-
-            string st_now_command = Enum.GetName(typeof(Command), i_Cnt);
-            GameObject go_Command = Find(st_now_command);
-            Sprite sprite_command = GetSprite(go_Command);
-            if (sprite_command == Sprite_None) return;
+            string st_ability = Enum.GetName(typeof(Command), i_Cnt);
+            GameObject g_ability = Find(st_ability);
+            SpriteRenderer sr_ability = GetSpriteRender(g_ability);
+            if (sr_ability.sprite == Sprite_None) return;
         }
-        //ZXC三つとも何かが入っている
-
+        //ZXC全部はいている
+        SceneManager.LoadScene("ForestScene");
     }
 
-    //空のスプライト
-    private Sprite Sprite_None;
     private void SetSprite()
     {
-        if (!Search()) return;
+        Scene();
+        if (Cancel()) return;
+
         for (int i_Cnt = 0; i_Cnt < 3; i_Cnt++){
-            string st_now_command = Enum.GetName(typeof(Command), i_Cnt);
-            GameObject go_Command = Find(st_now_command);
-            SpriteRenderer sprite_ren = go_Command.GetComponent<SpriteRenderer>();
-            Sprite sprite_command = GetSprite(go_Command);
-            if (sprite_command != Sprite_None) continue;
+            string st_command = Enum.GetName(typeof(Command), i_Cnt);
+            GameObject g_command = Find(st_command);
+            SpriteRenderer sr_command = GetSpriteRender(g_command);
+            if (sr_command.sprite != Sprite_None) continue;
+            
             //追加
-            sprite_ren.sprite = Constellation[NowCursor];
-            AnimeChange(sprite_ren.sprite);
-            StandChange(sprite_ren.sprite);
+            sr_command.sprite = Constellation[NowCursor];
+            AnimeChange(sr_command.sprite);
+            StandChange(sr_command.sprite);
+            Ability[i_Cnt] = NowCursor;
             return;
         }
 
@@ -127,7 +163,7 @@ public class Cursor : MonoBehaviour
         g_stand.GetComponent<Anime>().Change(int.Parse(s_for_work));
     }
 
-    private void AnimeChange(Sprite _sprite)
+    void AnimeChange(Sprite _sprite)
     {
         Sprite s_now_sprite = _sprite;
         string s_for_work = s_now_sprite.ToString();
@@ -139,43 +175,45 @@ public class Cursor : MonoBehaviour
         create_obj.GetComponent<Animator>().Play("Move");
     }
 
-    private bool Search()
+    bool Cancel()
     {
         for(int i=0;i<3;i++){
             //ZXCを探す
             string s_now_num = Enum.GetName(typeof(Command), i);
             GameObject g_test = GameObject.Find(s_now_num);
-            if (GetSprite(g_test) != Constellation[NowCursor]) continue;
+            if (GetSpriteRender(g_test).sprite != Constellation[NowCursor]) continue;
             //かぶっている画像を無しに
             g_test.GetComponent<SpriteRenderer>().sprite = Sprite_None;
-            return false;
+            b_Test = false;
+            return true;
         }
-        return true;
+        return false;
     }
 
+    bool b_Test = false;
     void Check()
     {
-        for (int i = 0; i < 3; i++)
-        {
+        for (int i = 0; i < 3; i++){
             //ZXCを探す
-            string s_now_num = Enum.GetName(typeof(Command), i);
-            GameObject obj = Find(s_now_num);
-            if (GetSprite(obj) != Sprite_None) continue;
+            string s_ability = Enum.GetName(typeof(Command), i);
+            GameObject g_ability = Find(s_ability);
+            if (GetSpriteRender(g_ability).sprite != Sprite_None) continue;
             CONSTELLATION_MAX = 12;
             return;
         }
+
         CONSTELLATION_MAX = 13;
-        NowCursor = 12;
+        if (!b_Test){
+            NowCursor = 12;
+            b_Test = true;
+        }
     }
 
-    GameObject Find(string _name)
-    {
-        return GameObject.Find(_name);
-    }
+    GameObject Find(string _name){ return GameObject.Find(_name); }
 
-    Sprite GetSprite(GameObject gameObject)
+    SpriteRenderer GetSpriteRender(GameObject gameObject)
     {
-        return gameObject.GetComponent<SpriteRenderer>().sprite;
+        return gameObject.GetComponent<SpriteRenderer>();
     }
 
     private bool PushKey(KeyCode _key)
