@@ -6,13 +6,19 @@ using System;
 public class Cursor : MonoBehaviour
 {
     public Sprite[] Constellation;
+    int CONSTELLATION_MAX = 12;
 
+    public static int[] a = new int[3];
+    static int Get(int _i)
+    {
+        return a[_i];
+    }
     private enum ConstellationState
     {
         Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra,
-        Scorpio, Sagittarius, Capricorn, Aquarius, Pisces, None
+        Scorpio, Sagittarius, Capricorn, Aquarius, Pisces, Sortie,None
     }
-
+    int[] i_test;
     private enum Command
     {
         Z,X,C,None
@@ -23,10 +29,12 @@ public class Cursor : MonoBehaviour
     void Start()
     {
         Trans = GetComponent<Transform>();
+        //i_test;
     }
 
     void Update()
     {
+        Check();
         if(PushKey(KeyCode.LeftArrow)){
             NowCursor -= 1;
         }
@@ -40,12 +48,14 @@ public class Cursor : MonoBehaviour
             NowCursor -= 4;
         }
 
-        if(NowCursor>=12){
-            NowCursor -= 12;
+        if(NowCursor>=CONSTELLATION_MAX){
+            NowCursor -= CONSTELLATION_MAX;
         }
         if(NowCursor<0){
-            NowCursor += 12;
+            NowCursor += CONSTELLATION_MAX;
         }
+
+
 
         //数字に合うEnumの名前を持ってくる
         //その名前の場所に移動させる
@@ -53,32 +63,57 @@ public class Cursor : MonoBehaviour
         GameObject g_test = GameObject.Find(s_now_num);
         Trans.position = g_test.GetComponent<Transform>().position;
 
+        Pos();
 
         if (PushKey(KeyCode.Return)){
             SetSprite();
         }
     }
 
+    public float Wight = 0;
+    public float Height = 0;
+    private void Pos()
+    {
+        if (NowCursor == 12)
+        {
+            Trans.localScale = new Vector3(Wight, Height, 0);
+        }
+    }
+
+
+    void Scene()
+    {
+        for (int i_Cnt = 0; i_Cnt < 3; i_Cnt++)
+        {
+
+            string st_now_command = Enum.GetName(typeof(Command), i_Cnt);
+            GameObject go_Command = Find(st_now_command);
+            Sprite sprite_command = GetSprite(go_Command);
+            if (sprite_command == Sprite_None) return;
+        }
+        //ZXC三つとも何かが入っている
+
+    }
+
+    //空のスプライト
     private Sprite Sprite_None;
-
-
     private void SetSprite()
     {
         if (!Search()) return;
         for (int i_Cnt = 0; i_Cnt < 3; i_Cnt++){
-
             string st_now_command = Enum.GetName(typeof(Command), i_Cnt);
-            GameObject go_Command = GameObject.Find(st_now_command);
+            GameObject go_Command = Find(st_now_command);
             SpriteRenderer sprite_ren = go_Command.GetComponent<SpriteRenderer>();
-
-            if (sprite_ren.sprite != Sprite_None) continue;
+            Sprite sprite_command = GetSprite(go_Command);
+            if (sprite_command != Sprite_None) continue;
             //追加
             sprite_ren.sprite = Constellation[NowCursor];
             AnimeChange(sprite_ren.sprite);
             StandChange(sprite_ren.sprite);
             return;
-
         }
+
+
     }
 
     void StandChange(Sprite _sprite)
@@ -110,16 +145,38 @@ public class Cursor : MonoBehaviour
             //ZXCを探す
             string s_now_num = Enum.GetName(typeof(Command), i);
             GameObject g_test = GameObject.Find(s_now_num);
-            Sprite spr_now = g_test.GetComponent<SpriteRenderer>().sprite;
-            if (spr_now != Constellation[NowCursor]) continue;
-            //画像を無しに
+            if (GetSprite(g_test) != Constellation[NowCursor]) continue;
+            //かぶっている画像を無しに
             g_test.GetComponent<SpriteRenderer>().sprite = Sprite_None;
             return false;
         }
         return true;
     }
-    
 
+    void Check()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            //ZXCを探す
+            string s_now_num = Enum.GetName(typeof(Command), i);
+            GameObject obj = Find(s_now_num);
+            if (GetSprite(obj) != Sprite_None) continue;
+            CONSTELLATION_MAX = 12;
+            return;
+        }
+        CONSTELLATION_MAX = 13;
+        NowCursor = 12;
+    }
+
+    GameObject Find(string _name)
+    {
+        return GameObject.Find(_name);
+    }
+
+    Sprite GetSprite(GameObject gameObject)
+    {
+        return gameObject.GetComponent<SpriteRenderer>().sprite;
+    }
 
     private bool PushKey(KeyCode _key)
     {
@@ -128,5 +185,7 @@ public class Cursor : MonoBehaviour
         }
         return false;
     }
+
+    
 
 }
