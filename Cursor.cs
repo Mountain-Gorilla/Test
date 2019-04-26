@@ -9,14 +9,14 @@ public class Cursor : MonoBehaviour
 
     public　Sprite[]    Constellation;
 
-    Vector3             RIGHT       = new Vector3(0.4f, 0, 0);
-    Vector3             LEFT        = new Vector3(-0.4f, 0, 0);
+    Vector3             RIGHT       = new Vector3(0.5f, 0, 0);
+    Vector3             LEFT        = new Vector3(-0.5f, 0, 0);
 
-    Vector3             MAX_SCALE   = new Vector3(1.4f, 1.4f, 1.0f);
+    Vector3             MAX_SCALE   = new Vector3(1.5f, 1.5f, 1.0f);
     Vector3             MIN_SCALE   = new Vector3(1.0f, 1.0f, 1.0f);
 
     //空のスプライト
-    Sprite              Sprite_None;
+    Sprite              Sprite_None = null;
 
     Transform           Trans;
     GameObject          g_Other;                //Cursorの左側
@@ -60,15 +60,28 @@ public class Cursor : MonoBehaviour
         }
     }
 
+    void Test()
+    {
+        if(!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow)&&
+           !Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.UpArrow))
+        {
+            test = false;
+            cnt = 0;
+        }
+            
+    }
 
     private void Move()
     {
+        Test();
+
         if (PushKey(KeyCode.LeftArrow))
         {
             NowCursor -= 1;
         }
         if (PushKey(KeyCode.RightArrow))
         {
+            Debug.Log("ERROR");
             NowCursor += 1;
         }
         if (PushKey(KeyCode.DownArrow))
@@ -80,6 +93,7 @@ public class Cursor : MonoBehaviour
             NowCursor -= 4;
         }
 
+
         if (NowCursor >= CONSTELLATION_MAX)
         {
             NowCursor -= CONSTELLATION_MAX;
@@ -88,6 +102,8 @@ public class Cursor : MonoBehaviour
         {
             NowCursor += CONSTELLATION_MAX;
         }
+
+
 
         //数字に合うEnumの名前を持ってくる
         //その名前の場所に移動させる
@@ -112,6 +128,7 @@ public class Cursor : MonoBehaviour
             g_Other.transform.localScale = MIN_SCALE;
 
         }
+
     }
 
 
@@ -216,11 +233,21 @@ public class Cursor : MonoBehaviour
         return gameObject.GetComponent<SpriteRenderer>();
     }
 
+    bool test=false;
+    int cnt = 0;
+    KeyCode Key;
     private bool PushKey(KeyCode _key)
     {
         if (Input.GetKeyDown(_key)) {
+            test = true;
+            Key = _key;
             return true;
         }
+        if (Key != _key) return false;
+        if (test){
+            cnt++;
+        }
+        if (test && cnt > 60) return true;
         return false;
     }
 
