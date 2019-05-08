@@ -23,7 +23,7 @@ public class Cursor : MonoBehaviour
 
     int                 NowCursor           = 0;
     int                 CONSTELLATION_MAX   = 12;
-
+    const int           BUTTON_HOLDTIME = 40;
     public static int[] Ability = new int[3];
     /*========================================*/
     //プレイヤーに渡す選択情報
@@ -55,37 +55,49 @@ public class Cursor : MonoBehaviour
 
         Move();
 
-        if (PushKey(KeyCode.Return)){
+        if (PushKey(KeyCode.Return)|| PushKey(KeyCode.Space)){
             SetSprite();
+        }
+
+        for(int i_cnt=0; i_cnt < 3; i_cnt++) {
+            SetAbility(i_cnt);
+
         }
     }
 
-    void Test()
+    void HoldDecision()
     {
         if(!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow)&&
            !Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.UpArrow))
         {
-            test = false;
-            cnt = 0;
+            b_PushButton = false;
+            i_HoldTime = 0;
         }
             
     }
 
     private void Move()
     {
-        Test();
+        HoldDecision();
 
         if (PushKey(KeyCode.LeftArrow))
         {
-            NowCursor -= 1;
+            if (NowCursor % 4 == 0 && CONSTELLATION_MAX==13)
+            {
+                NowCursor = 12;
+            }
+            else
+            {
+                NowCursor -= 1;
+            }
         }
         if (PushKey(KeyCode.RightArrow))
         {
-            Debug.Log("ERROR");
             NowCursor += 1;
         }
         if (PushKey(KeyCode.DownArrow))
         {
+
             NowCursor += 4;
         }
         if (PushKey(KeyCode.UpArrow))
@@ -131,37 +143,62 @@ public class Cursor : MonoBehaviour
 
     }
 
-
-    void Scene()
+    void SetAbility(int _command)
     {
-        if (NowCursor != 12) return;
+        if (NowCursor == CONSTELLATION_MAX - 1) return;
+
+
+        string st_ability = Enum.GetName(typeof(Command), _command);
+
+        if (Input.GetKeyDown(st_ability.ToLower()))
+        {
+            Cancel();
+            GameObject g_ability = Find(st_ability);
+            SpriteRenderer sr_command = GetSpriteRender(g_ability);
+            sr_command.sprite = Constellation[NowCursor];
+            AnimeChange();
+            StandChange();
+            Ability[_command] = NowCursor;
+
+        }
+    }
+
+    bool Scene()
+    {
+        if (NowCursor != 12) return false;
 
         for (int i_Cnt = 0; i_Cnt < 3; i_Cnt++)
         {
             string st_ability = Enum.GetName(typeof(Command), i_Cnt);
             GameObject g_ability = Find(st_ability);
             SpriteRenderer sr_ability = GetSpriteRender(g_ability);
-            if (sr_ability.sprite == Sprite_None) return;
+            if (sr_ability.sprite == Sprite_None) return false;
         }
+        //このオブジェクトのアクティブを切る
+        gameObject.SetActive(false);
+
         //ZXC全部はいている
         SceneManager.LoadScene("ForestScene");
+        return true;
     }
 
     private void SetSprite()
     {
-        Scene();
+        if (Scene()) return;
         if (Cancel()) return;
 
         for (int i_Cnt = 0; i_Cnt < 3; i_Cnt++){
+            //ZXC
             string st_command = Enum.GetName(typeof(Command), i_Cnt);
             GameObject g_command = Find(st_command);
             SpriteRenderer sr_command = GetSpriteRender(g_command);
+            //ZXCのどれかに何も入っていない時
             if (sr_command.sprite != Sprite_None) continue;
             
             //追加
             sr_command.sprite = Constellation[NowCursor];
-            AnimeChange(sr_command.sprite);
-            StandChange(sr_command.sprite);
+            AnimeChange();
+            StandChange();
             Ability[i_Cnt] = NowCursor;
             return;
         }
@@ -169,26 +206,16 @@ public class Cursor : MonoBehaviour
 
     }
 
-    void StandChange(Sprite _sprite)
+    void StandChange()
     {
-        Sprite s_now_sprite = _sprite;
-
         GameObject g_stand = GameObject.Find("Stand");
-
-        string s_for_work = s_now_sprite.ToString();
-        s_for_work = s_for_work.Substring(14, 1);
-        g_stand.GetComponent<Anime>().Change(int.Parse(s_for_work));
+        g_stand.GetComponent<Anime>().Change(NowCursor);
     }
 
-    void AnimeChange(Sprite _sprite)
+    void AnimeChange()
     {
-        Sprite s_now_sprite = _sprite;
-        string s_for_work = s_now_sprite.ToString();
-        //数値の切り取り
-        s_for_work = s_for_work.Substring(14, 1);
-
         GameObject create_obj = GameObject.Find("Anime");
-        create_obj.GetComponent<SpriteChange>().SharingState(int.Parse(s_for_work));
+        create_obj.GetComponent<SpriteChange>().SharingState(NowCursor);
         create_obj.GetComponent<Animator>().Play("Move");
     }
 
@@ -197,17 +224,17 @@ public class Cursor : MonoBehaviour
         for(int i=0;i<3;i++){
             //ZXCを探す
             string s_now_num = Enum.GetName(typeof(Command), i);
-            GameObject g_test = GameObject.Find(s_now_num);
-            if (GetSpriteRender(g_test).sprite != Constellation[NowCursor]) continue;
+            GameObject g_now_obj = GameObject.Find(s_now_num);
+            if (GetSpriteRender(g_now_obj).sprite != Constellation[NowCursor]) continue;
             //かぶっている画像を無しに
-            g_test.GetComponent<SpriteRenderer>().sprite = Sprite_None;
-            b_Test = false;
+            g_now_obj.GetComponent<SpriteRenderer>().sprite = Sprite_None;
+            b_Check = false;
             return true;
         }
         return false;
     }
 
-    bool b_Test = false;
+    bool b_Check = false;
     void Check()
     {
         for (int i = 0; i < 3; i++){
@@ -220,9 +247,9 @@ public class Cursor : MonoBehaviour
         }
 
         CONSTELLATION_MAX = 13;
-        if (!b_Test){
+        if (!b_Check){
             NowCursor = 12;
-            b_Test = true;
+            b_Check = true;
         }
     }
 
@@ -233,21 +260,21 @@ public class Cursor : MonoBehaviour
         return gameObject.GetComponent<SpriteRenderer>();
     }
 
-    bool test=false;
-    int cnt = 0;
-    KeyCode Key;
+    bool    b_PushButton=false;
+    int     i_HoldTime = 0;
+    KeyCode Key_HoleCode;
     private bool PushKey(KeyCode _key)
     {
         if (Input.GetKeyDown(_key)) {
-            test = true;
-            Key = _key;
+            b_PushButton = true;
+            Key_HoleCode = _key;
             return true;
         }
-        if (Key != _key) return false;
-        if (test){
-            cnt++;
+        if (Key_HoleCode != _key) return false;
+        if (b_PushButton){
+            i_HoldTime++;
         }
-        if (test && cnt > 60) return true;
+        if (b_PushButton && i_HoldTime > BUTTON_HOLDTIME) return true;
         return false;
     }
 
