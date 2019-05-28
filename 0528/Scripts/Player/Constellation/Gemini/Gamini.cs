@@ -21,9 +21,6 @@ public class Gamini : MonoBehaviour
 
 	private Rigidbody2D g_DebugRight2D; //デバック用
 
-	private GameObject g_Summon;
-	private Summon     s_Effect;
-
 	/*=====================*/
 	// テクスチャ変更
 	/*=====================*/
@@ -66,11 +63,6 @@ public class Gamini : MonoBehaviour
 	{
 		TexChangeInit();
 		overrideTexture = tex_Gemini;
-
-		g_Summon = GameObject.Find("Summon");
-		s_Effect = g_Summon.GetComponent<Summon>();
-		g_Summon.SetActive(false);
-
 		OnEnable();
 	}
 
@@ -87,8 +79,6 @@ public class Gamini : MonoBehaviour
 
 		an_Mortion = GetComponent<Animator>();
 		n_MortionState = (int)Mortion.Stay;
-
-		g_Summon.SetActive(true);
 
 	}
 
@@ -171,8 +161,6 @@ public class Gamini : MonoBehaviour
 		MortionManager();
 
 		transform.localScale = new Vector3(g_PlayerScript.IsDirection() * 1.5f, 1.5f, 1.0f);
-
-		if (g_Summon.activeSelf && s_Effect.IsAnimeEnd()) g_Summon.SetActive(false);
 
 		// テクスチャの変更
 		s_Render.SetPropertyBlock(mpb_Block);

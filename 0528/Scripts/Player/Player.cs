@@ -15,8 +15,7 @@ public class Player : MonoBehaviour
     // パラメータ設定
     private HP g_HP;
 	private const float cf_HPMax = 600.0f;  // 最大値
-	private const float cf_Damage = 10.0f;  // ダメージ量
-	private bool b_AliveFlag = false;
+	private const float cf_Damage = 5.0f;  // ダメージ量
 
     // 横移動
     private const float cf_MaxSpeed  = 0.15f;       // 最大値
@@ -35,39 +34,25 @@ public class Player : MonoBehaviour
 	// 敵関係
 	private GameObject g_Enemy;
 
-	/*=============================*/
-	// エフェクト
-	/*=============================*/
+	// ダメージエフェクト
 	private GameObject g_Damege;
 	private FlushController g_DamegeScript;
-
-	private GameObject g_Jump;
-	private JumpEffect je_Effect;
-
-	private AudioSource[] as_Sound;
-
-
-
-	/*=======================*/
-	//  ゲッター
-	/*=======================*/
-	public bool IsAlive() { return b_AliveFlag; }
-
-	/*======================*/
-	//  初期化
-	/*======================*/
-	void Start()
+	
+    /*======================*/
+    //  初期化
+    /*======================*/
+    void Start()
     {
 		// 初期座標を設定
-		transform.position = new Vector3(-175.3f, -42.3f, 0.0f);
+		//transform.position = new Vector3(-175.3f, -42.3f, 0.0f);
+        transform.position = new Vector3(103.3f, 0.3f, 0.0f);
 
 		b_JumpFlag = false;
 
         g_Move = new Move();
-
-		g_HP = GetComponent<HP>();
+     
+		g_HP = new HP();
         g_HP.SetHP(cf_HPMax);
-		b_AliveFlag = true;
 
         an_Mortion = GetComponent<Animator>();
 		n_MortionState = (int)Mortion.Stay;
@@ -78,14 +63,8 @@ public class Player : MonoBehaviour
 
 		g_Enemy = GameObject.Find("Goblin");
 
-		g_Damege = GameObject.Find("DamageEffect");
+		g_Damege = GameObject.Find("PlayerEffect");
 		g_DamegeScript = g_Damege.GetComponent<FlushController>();
-
-		g_Jump = GameObject.Find("Jump_Effect");
-		je_Effect = g_Jump.GetComponent<JumpEffect>();
-		g_Jump.SetActive(false);
-
-		as_Sound = GetComponents<AudioSource>();
 
     }
 	
@@ -118,7 +97,6 @@ public class Player : MonoBehaviour
             transform.Translate(g_Move.AccelerateLeft(cf_AccelOnce, cf_MaxSpeed), 0.0f, 0.0f);
 			if(n_MortionState != (int)Mortion.Jump)n_MortionState = (int)Mortion.Move;
 			n_LeftRightFlag = -1;
-			SoundSide();
         }
 
         // 右が押されたとき
@@ -126,20 +104,12 @@ public class Player : MonoBehaviour
             transform.Translate(g_Move.AccelerateRight(cf_AccelOnce, cf_MaxSpeed), 0.0f, 0.0f);
 			if(n_MortionState != (int)Mortion.Jump)n_MortionState = (int)Mortion.Move;
             n_LeftRightFlag = 1;
-
-			SoundSide();
         }
 
         // どちらも押されてないとき
         else SideKeyRelease();
     }
 
-	void SoundSide()
-	{
-		if (!as_Sound[1].isPlaying) {
-			as_Sound[1].Play();
-		}
-	}
 
     // キーが離されているとき
     void SideKeyRelease()
@@ -149,8 +119,6 @@ public class Player : MonoBehaviour
         
         // 左が離されたとき
         if (g_Move.GetMove() < 0.0f) transform.Translate(g_Move.DecelerateLeft(cf_DecelOnce), 0.0f, 0.0f);
-
-		as_Sound[1].Stop();
 	}
 
     //---縦移動関係---//
@@ -160,14 +128,9 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && g_right2D.velocity.y < 0.3 && g_right2D.velocity.y > -0.3) {
             g_right2D.AddForce(transform.up * f_JumpForce);
 			n_MortionState = (int)Mortion.Jump;
-			g_Jump.SetActive(true);
-			g_Jump.transform.position = this.gameObject.transform.position;
 			b_JumpFlag = true;
-			as_Sound[0].Play();
 		}
-
-		if (g_Jump.activeSelf && je_Effect.IsAnimeEnd()) g_Jump.SetActive(false);
-
+        
         // ジャンプ中
         if (g_right2D.velocity.y > 2.5f) n_MortionState = (int)Mortion.Jump;
 		
@@ -179,21 +142,20 @@ public class Player : MonoBehaviour
 	void OnTriggerEnter2D(Collider2D _collider)
 	{
 		if(_collider.gameObject.tag == "TileMap") {
-			v_PositionSave = transform.position;
 			b_JumpFlag = false;
 		}
 
 		if (_collider.gameObject.tag == "EnemyAttack") {
-			HpDecrease(5.0f);
+			HpDecrease();
 		}
 
 		if(_collider.gameObject.tag == "Fall") {
 
 			int tmp = 1;
 			if ((transform.position.x - v_PositionSave.x) > 0) tmp *= -1;
-			transform.position = new Vector3(v_PositionSave.x + tmp * 10.0f, v_PositionSave.y + 3.0f, 0.0f);
+			transform.position = new Vector3(v_PositionSave.x + tmp * 3.0f, v_PositionSave.y, 0.0f);
 
-			g_HP.Decrease(100.0f);
+			g_HP.Decrease(cf_Damage);
 			GameObject director = GameObject.Find("HPDirector");
 			director.GetComponent<HPDirector>().DecreaseHP(g_HP.GetHp(), cf_HPMax);
 			g_right2D.AddForce(transform.right * -10.0f);
@@ -203,7 +165,7 @@ public class Player : MonoBehaviour
     void OnTriggerStay2D(Collider2D _chara)
     {
 		if (_chara.gameObject.tag == "EnemyAttack") {
-			HpDecrease(5.0f);
+			HpDecrease();
 		}
 
     }
@@ -223,15 +185,9 @@ public class Player : MonoBehaviour
 	void OnCollisionEnter2D(Collision2D _collision)
 	{
 		if (_collision.gameObject.tag == "EnemyAttack") {
-			HpDecrease(cf_Damage);
+			HpDecrease();
 		}
 
-		if (_collision.gameObject.tag == "Fall") {
-
-			int tmp = 1;
-			if ((transform.position.x - v_PositionSave.x) > 0) tmp *= -1;
-			transform.position = new Vector3(v_PositionSave.x + tmp * 3.0f, v_PositionSave.y + 10.0f, 0.0f);
-		}
 	}
 
 	void OnCollisionExit2D(Collision2D _collision)
@@ -241,24 +197,24 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	void HpDecrease(float _decrease)
+	void HpDecrease()
 	{
-		g_HP.Decrease(_decrease);
+		g_HP.Decrease(cf_Damage);
 		GameObject director = GameObject.Find("HPDirector");
 		director.GetComponent<HPDirector>().DecreaseHP(g_HP.GetHp(), cf_HPMax);
 		g_right2D.AddForce(transform.right * -10.0f);
 		g_DamegeScript.OnFlag();
 	}
 
-	/*============================*/
-	// 値をすべて表示(デバック用)
-	/*============================*/
-	void ValueDraw()
+    /*============================*/
+    // 値をすべて表示(デバック用)
+    /*============================*/
+    void ValueDraw()
     {
-		//g_Move.ValueDraw();
-		//Debug.Log(n_MortionState);
-		//Debug.Log(g_right2D.velocity.y);
-		Debug.Log(b_JumpFlag);
+        //g_Move.ValueDraw();
+        //Debug.Log(n_MortionState);
+        //Debug.Log(g_right2D.velocity.y);
+        Debug.Log(g_HP.GetHp());
 		
     }
 
@@ -292,17 +248,40 @@ public class Player : MonoBehaviour
 		}
 	}
 
+
+	// 当たり判定
+	void HitJudge()
+	{
+		if (g_Enemy.activeSelf == false) return;
+
+		Vector2 v_Player = transform.position;
+		Vector2 v_Enemy= g_Enemy.transform.position;
+		Vector2 v_Dir = v_Player - v_Enemy;
+
+		float f_Dir = v_Dir.magnitude;
+		float f_RadEnemy = 0.5f;
+		float f_RadPlayer = 1.0f;
+
+		if (f_Dir < f_RadEnemy + f_RadPlayer)
+		{
+			g_HP.Decrease(cf_Damage);
+			GameObject director = GameObject.Find("HPDirector");
+			director.GetComponent<HPDirector>().DecreaseHP(g_HP.GetHp(), cf_HPMax);
+			g_right2D.AddForce(transform.right * -10.0f);
+			g_DamegeScript.OnFlag();
+		}
+		else g_DamegeScript.DestoryFlag();
+	}
+
 	// HP管理
 	void HPManagement()
 	{
-		if (g_HP.GetHp() <= 0.0f) b_AliveFlag = false;
-
 		// デバック用HP回復
-		//if (Input.GetKeyDown(KeyCode.M)) {
-		//	g_HP.SetHP(cf_HPMax);
-		//	GameObject director = GameObject.Find("HPDirector");
-		//	director.GetComponent<HPDirector>().Reset();
-		//}
+		if (Input.GetKeyDown(KeyCode.M)) {
+			g_HP.SetHP(cf_HPMax);
+			GameObject director = GameObject.Find("HPDirector");
+			director.GetComponent<HPDirector>().Reset();
+		}
 	}
 
 	/*===========*/
@@ -310,8 +289,6 @@ public class Player : MonoBehaviour
 	/*===========*/
 	void Update ()
     {
-		if (!b_AliveFlag) return;
-
         // 横移動
         SideMove();
 

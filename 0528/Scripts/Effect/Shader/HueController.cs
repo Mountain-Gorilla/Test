@@ -9,42 +9,25 @@ public class HueController : MonoBehaviour
     // スプライトの明るさ　0.5が真ん中、大きくなるほど明るくなります
     public float brightness = 0.5f;
 
-	bool b_Up;
-
-	// Start is called before the first frame update
-	void Start()
+    // Start is called before the first frame update
+    void Start()
     {
         // ユニークID取得
         this.propID = Shader.PropertyToID("_Brightness");
-		b_Up = true;
     }
 
     // Update is called once per frame
     void Update()
-    {
-		float once = 0.01f;
-
-		if (b_Up)
-		{
-			brightness += once;
-			if (brightness >= 1.0f) b_Up = false;
-		}
-
-		else
-		{
-			brightness -= once;
-			if (brightness <= 0.5f) b_Up = true;
-		}
-
-		// 確認用　左右キーで切り替えます
-		//if (Input.GetKey(KeyCode.RightArrow))
-  //      {
-  //          brightness += 0.01f;
-  //      }
-  //      if(Input.GetKey(KeyCode.LeftArrow))
-  //      {
-  //          brightness -= 0.01f;
-  //      }
+    {      
+        // 確認用　左右キーで切り替えます
+        if(Input.GetKey(KeyCode.RightArrow))
+        {
+            brightness += 0.01f;
+        }
+        if(Input.GetKey(KeyCode.LeftArrow))
+        {
+            brightness -= 0.01f;
+        }
         if (brightness > 1.0f) brightness = 1.0f;
         if (brightness < 0.0f) brightness = 0.0f;
 

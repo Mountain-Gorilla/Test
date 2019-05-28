@@ -3,38 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Title : MonoBehaviour
-{
-	[SerializeField]
-	GameObject g_Fade;
-	FadeActive fa_IsCheck;
-
-	private bool b_FadeFlag;
+public class Title : MonoBehaviour {
 
 	// Use this for initialization
-	void Start ()
-	{
-		fa_IsCheck = g_Fade.GetComponent<FadeActive>();
-		b_FadeFlag = false;
-	} 
+	void Start () {
+		
+	}
 	
 	// Update is called once per frame
 	void Update ()
     {
         if (Input.GetKeyDown(KeyCode.Return)) {
-			b_FadeFlag = true;
-			fa_IsCheck.FadeIn();
-            //SceneManager.LoadScene("ForestScene");
+            SceneManager.LoadScene("ForestScene");
         }
 
-		if (b_FadeFlag && fa_IsCheck.IsFadeFinish())
-		{
-			b_FadeFlag = false;
-
-			SceneManager.LoadScene("ForestScene");
-		}
-
-		if (Input.GetKeyDown(KeyCode.Escape)) {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
             //SceneManager.LoadScene("BaseCamp");
         }
 

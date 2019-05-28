@@ -58,6 +58,10 @@ public class Breath : MonoBehaviour
 
 	void OnTriggerEnter2D(Collider2D _collider)
 	{
+		if(_collider.gameObject.tag == "Player") {
+			b_ActiveFlag = false;
+		}
+
 		if(_collider.gameObject.tag == "Reflection") {
 			n_IsReflection = -1;
 		}
@@ -67,13 +71,4 @@ public class Breath : MonoBehaviour
 			b_ActiveFlag = false;
 		}
 	}
-
-	void OnTriggerStay2D(Collider2D _collider)
-	{
-		if (_collider.gameObject.tag == "Player")
-		{
-			//b_ActiveFlag = false;
-		}
-	}
-
 }

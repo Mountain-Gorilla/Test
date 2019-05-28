@@ -24,8 +24,9 @@ public class Scene : MonoBehaviour
         g_TopBar = GameObject.Find("AnimeBarUp");
         g_BottomBar = GameObject.Find("AnimeBarDown");
 
-        g_HpBar = GameObject.Find("HpBar");
-        g_Boss = GameObject.Find("Boss");
+        g_HpBar = GameObject.Find("HPGauge");
+        //g_Boss = GameObject.Find("Boss");
+        g_Boss = this.gameObject;
 
     }
 
@@ -33,7 +34,6 @@ public class Scene : MonoBehaviour
     private const float cf_AccelOnce = 0.15f;       // 一度の加速量(未使用)
     [SerializeField] private int CNT_MAX = 110;
     [SerializeField] private float BAR_MOVE = 0.015f;
-    [SerializeField] private Vector3 Second_Pos;
     private float f_Dis = 0.0f;
     private int i_Cnt = 0;
     private bool b_Start = false;
@@ -75,13 +75,12 @@ public class Scene : MonoBehaviour
     public void End()
     {
         g_Player.GetComponent<Player>().enabled = true;
-		g_HpBar.SetActive(true);
+        g_HpBar.GetComponent<Image>().enabled = true;
         g_BottomBar.GetComponent<AnimeBar>().Invisible();
         g_TopBar.GetComponent<AnimeBar>().Invisible();
         b_Start = false;
+        this.gameObject.GetComponent<Rigidbody2D>().simulated = true;
 
-        this.gameObject.AddComponent<Scene>();
-        transform.position = Second_Pos;
 
         Destroy(this);
     }
@@ -92,10 +91,11 @@ public class Scene : MonoBehaviour
         if (col.tag == "Player")
         {
             g_Cam.GetComponent<Camera>().enabled = false;
-			g_HpBar.SetActive(false);
+            g_HpBar.GetComponent<Image>().enabled = false;
             g_Player.GetComponent<Animator>().Play("Move");
             g_Player.GetComponent<Player>().enabled = false;
             b_Start = true;
+            this.gameObject.GetComponent<Rigidbody2D>().simulated = false;
         }
     }
     

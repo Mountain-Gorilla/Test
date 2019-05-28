@@ -53,13 +53,6 @@ public class ActiveManager : MonoBehaviour
 	private GameObject   g_Transform;
 	private TransformationDirector td_Script;
 
-	// サウンド
-	[SerializeField]
-	List<AudioClip> lac_Sound = new List<AudioClip>();
-
-	GameObject g_SE;
-	AudioSource as_Source;
-
 	// ロード時に実行
 	void Start()
     {
@@ -71,9 +64,6 @@ public class ActiveManager : MonoBehaviour
 
 		g_Transform = GameObject.Find("TransformDirector");
 		td_Script = g_Transform.GetComponent<TransformationDirector>();
-
-		g_SE = GameObject.Find("ConsteSE");
-		as_Source = g_SE.GetComponent<AudioSource>();
 
 		for (int i = 0; i < g_Constellation.Count; i++) {
 			g_Constellation[i].SetActive(false);
@@ -152,7 +142,6 @@ public class ActiveManager : MonoBehaviour
 
 			AbilityInterval(i);
 
-			Debug.Log(n_Status[i]);
 		}
 
         //Debug.Log(n_Status);
@@ -191,7 +180,6 @@ public class ActiveManager : MonoBehaviour
 		g_Constellation[n_Status[_index]].SetActive(true);
 		g_SpriteChange.SharingState(n_Status[_index]);
 		id_Director.SetAbility(_index, n_Status[_index]);
-		as_Source.PlayOneShot(lac_Sound[n_Status[_index]]);
 		
 	}
 
