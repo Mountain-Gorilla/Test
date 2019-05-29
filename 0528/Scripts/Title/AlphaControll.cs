@@ -7,6 +7,9 @@ public class AlphaControll : MonoBehaviour
 	[SerializeField]
 	SpriteRenderer sr_Alpha;
 
+	[SerializeField]
+	float f_AlphaOnce = 0.01f;
+
 	float f_Alpha = 1.0f;
 	bool b_Up;
 
@@ -19,17 +22,15 @@ public class AlphaControll : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-		float once = 0.01f;
-
+    {		
 		if (b_Up) {
-			f_Alpha += once;
+			f_Alpha += f_AlphaOnce;
 			if (f_Alpha >= 1.0f) b_Up = false;
 		}
 
 		else
 		{
-			f_Alpha -= once;
+			f_Alpha -= f_AlphaOnce;
 			if (f_Alpha <= 0.5f) b_Up = true;
 		}
 

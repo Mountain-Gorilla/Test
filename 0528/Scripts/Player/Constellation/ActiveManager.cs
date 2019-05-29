@@ -53,6 +53,10 @@ public class ActiveManager : MonoBehaviour
 	private GameObject   g_Transform;
 	private TransformationDirector td_Script;
 
+	// 双子座用
+	[SerializeField]
+	GeminiDirector gd_UseAttackAbility;
+
 	// サウンド
 	[SerializeField]
 	List<AudioClip> lac_Sound = new List<AudioClip>();
@@ -93,15 +97,15 @@ public class ActiveManager : MonoBehaviour
 	// タイマーの制限時間の設定
 	void SetSpan()
 	{
-		cf_Span[(int)ConstellationState.Aries]       = 10.0f;
+		cf_Span[(int)ConstellationState.Aries]       = 5.0f;
 		cf_Span[(int)ConstellationState.Taurus]      = 3.0f;
 		cf_Span[(int)ConstellationState.Gemini]      = 10.0f;
 		cf_Span[(int)ConstellationState.Cancer]      = 3.0f;
 		cf_Span[(int)ConstellationState.Leo]         = 0.8f;
 		cf_Span[(int)ConstellationState.Virgo]       = 4.0f;
-		cf_Span[(int)ConstellationState.Libra]       = 15.0f;
+		cf_Span[(int)ConstellationState.Libra]       = 10.0f;
 		cf_Span[(int)ConstellationState.Scorpio]     = 3.0f;
-		cf_Span[(int)ConstellationState.Sagittarius] = 1.0f;
+		cf_Span[(int)ConstellationState.Sagittarius] = 0.8f;
 		cf_Span[(int)ConstellationState.Capricorn]   = 5.0f;
 		cf_Span[(int)ConstellationState.Aquarius]    = 3.0f;
 		cf_Span[(int)ConstellationState.Pisces]      = 0.35f;
@@ -124,26 +128,29 @@ public class ActiveManager : MonoBehaviour
 		}
 	}
 
+	// インターバル
 	void AbilityInterval(int _index)
 	{
 		if (n_RecoveryState[_index] == (int)ConstellationState.None) return;
 
 		f_Timer[_index] += Time.deltaTime;
 		id_Director.Recovery(_index,f_Timer[_index], cf_Span[n_RecoveryState[_index]]);
+
 		if (f_Timer[_index] > cf_Span[n_RecoveryState[_index]]) {
+			g_Constellation[n_Status[_index]].SetActive(false);
+			n_Status[_index] = (int)ConstellationState.None;
 			n_RecoveryState[_index] = (int)ConstellationState.None;
 			f_Timer[_index] = 0.0f;
 			b_Ability[_index] = false;
 			id_Director.DestroyFlag(_index);
+
+			if (g_Constellation[(int)ConstellationState.Gemini].activeSelf && _index == (int)AbilityKey.Z) gd_UseAttackAbility.EndAttack();
 		}
 	}
 
     // 更新
     void Update ()
     {
-        GameObject g_Boss = GameObject.Find("Boss");
-        Scene s_BossScene = g_Boss.GetComponent<Scene>();        
-        if (s_BossScene.GetStart()) return;
 		//AbilitySelect();
 		for (int i = 0; i < (int)AbilityKey.Max; i++){
 
@@ -151,7 +158,7 @@ public class ActiveManager : MonoBehaviour
 
 			IsTransformation(i);
 
-			AbilityInvocating(i);
+			//AbilityInvocating(i);
 
 			AbilityInterval(i);
 
@@ -166,19 +173,17 @@ public class ActiveManager : MonoBehaviour
 	{
 		if (!b_Ability[_index]) return false;
 
+		// 変身アニメーション終了時能力発動
 		if (td_Script.IsEndAnimation(g_Player.transform.position)) {
-			n_Status[_index] = id_Director.GetAbility(_index);
+			Invocation(_index);
 			n_NowStatus = n_Status[_index];
-			g_Constellation[n_Status[_index]].SetActive(true);
-			g_SpriteChange.SharingState(n_Status[_index]);
-			id_Director.SetAbility(_index, n_Status[_index]);
 			return true;
 		}
 		return false;
 	}
 
-	// 発動時
-	void Invocation(bool _now_state,int _index)
+	// 発動確認
+	void CheckInvocation(bool _now_state,int _index)
 	{
 		if (id_Director.GetAbility(_index) == (int)ConstellationState.None) {
 			b_Ability[_index] = false;
@@ -190,13 +195,26 @@ public class ActiveManager : MonoBehaviour
 			return;
 		}
 
+		Invocation(_index);
+		
+	}
+
+	// 発動
+	void Invocation(int _index)
+	{
 		n_Status[_index] = id_Director.GetAbility(_index);
+		n_RecoveryState[_index] = n_Status[_index];
 		g_Constellation[n_Status[_index]].SetActive(true);
 		g_SpriteChange.SharingState(n_Status[_index]);
 		id_Director.SetAbility(_index, n_Status[_index]);
 		as_Source.PlayOneShot(lac_Sound[n_Status[_index]]);
-		
+
+		// 双子座
+		if(g_Constellation[(int)ConstellationState.Gemini].activeSelf && _index == (int)AbilityKey.Z) {
+			gd_UseAttackAbility.SharingAttackNumber();
+		}
 	}
+	
 
 	// 能力の発動
 	void SetAbility(int _index)
@@ -209,7 +227,7 @@ public class ActiveManager : MonoBehaviour
 			(Input.GetKey(KeyCode.C) && _index == (int)AbilityKey.C)) {
 
 			b_Ability[_index] = true;
-			Invocation(n_NowStatus == id_Director.GetAbility(_index),_index);
+			CheckInvocation(n_NowStatus == id_Director.GetAbility(_index),_index);
 		}
 	}
 

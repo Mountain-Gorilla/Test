@@ -43,8 +43,7 @@ public class IconDirector : MonoBehaviour
     public void SetAbility(int _index ,int _status)
 	{
 		lb_Ability[_index] = true;
-		
-		// アイコン
-		//lih_Half[_index].SetSprite(lna_Ability[_index].GetNowSprite());
+
+		lig_Gauge[_index].UseAbility();
 	}
 }

@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Bite : MonoBehaviour
 {
+	[SerializeField]
 	private GameObject g_Player;
+
+	[SerializeField]
 	private Player g_Script;
 
 	// アニメーション
@@ -25,9 +28,6 @@ public class Bite : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-		g_Player = GameObject.Find("Player");
-		g_Script = g_Player.GetComponent<Player>();
-
 		an_Bite = GetComponent<Animator>();
 		OnEnable();
 	}

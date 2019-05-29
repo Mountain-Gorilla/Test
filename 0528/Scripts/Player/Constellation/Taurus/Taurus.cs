@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class Taurus : MonoBehaviour
 {
-    private GameObject  g_Player;           //プレイヤー
-    private Player g_Script;
+	[SerializeField]
+	private GameObject g_Player;
+
+	[SerializeField]
+	private Player g_Script;
+
 	private Animator an_Rush;
 
-	private GameObject g_Rush;
+	//private GameObject g_Rush;
 
     private float f_Timer = 0.0f;           //タイマー
     private const float cf_Wait = 1.0f;     //硬直(溜め？)時間
@@ -25,12 +29,10 @@ public class Taurus : MonoBehaviour
     /*=============================================*/
     void Start()
     {
-        g_Player = GameObject.Find("Player");
-		g_Script = g_Player.GetComponent<Player>();
 		an_Rush = g_Player.GetComponent<Animator>();
 
-		g_Rush = GameObject.Find("Rush");
-		g_Rush.SetActive(false);
+		//g_Rush = GameObject.Find("Rush");
+		//g_Rush.SetActive(false);
 
 		b_ActiveFlg = false;
 		b_WallJudge = false;
@@ -42,7 +44,7 @@ public class Taurus : MonoBehaviour
     /*=============================================*/
     void OnEnable()
     {
-		g_Rush.SetActive(true);
+		//g_Rush.SetActive(true);
 		b_WallJudge = false;
         b_ActiveFlg = false;
         f_Timer = 0.0f;
@@ -51,7 +53,7 @@ public class Taurus : MonoBehaviour
 	void OnDisable()
 	{
 		an_Rush.Play("Stay");
-		g_Rush.SetActive(false);
+		//g_Rush.SetActive(false);
 	}
 
 	void OnTriggerEnter2D(Collider2D _wall)
@@ -88,7 +90,7 @@ public class Taurus : MonoBehaviour
 
         ////能力発動終了時
         if ((f_Timer > cf_Active) && b_ActiveFlg == true) {
-			g_Rush.SetActive(true);
+			//g_Rush.SetActive(true);
 			b_ActiveFlg = false;
             f_Timer = 0.0f;
         }

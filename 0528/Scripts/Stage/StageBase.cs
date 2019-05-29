@@ -34,7 +34,6 @@ public class StageBase : MonoBehaviour
 		v_StartPlayerPos = g_Player.transform.position;
 		p_Script = g_Player.GetComponent<Player>();
 
-        g_Boss = GameObject.Find("Boss");
 		bs_IsAlive = g_Boss.GetComponent<BossState>();
 
 		b_FadeOut = true;
@@ -48,7 +47,7 @@ public class StageBase : MonoBehaviour
 	}
 
 	// Update is called once per frame
-	void Update ()
+	void LateUpdate ()
     {
 		if ((!p_Script.IsAlive() || bs_IsAlive.IsGameClear()) && !b_FadeIn)
 		{

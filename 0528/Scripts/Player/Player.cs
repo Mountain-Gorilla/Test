@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 {
 
     private Move    g_Move;       // 移動
-    private const float f_JumpForce = 900.0f;    // ジャンプ力
+    private const float f_JumpForce = 1300.0f;    // ジャンプ力
 	private bool        b_JumpFlag;
 
 	private Vector3 v_PositionSave;  // 落ちた時用
@@ -258,7 +258,7 @@ public class Player : MonoBehaviour
 		//g_Move.ValueDraw();
 		//Debug.Log(n_MortionState);
 		//Debug.Log(g_right2D.velocity.y);
-		Debug.Log(g_HP.GetHp());
+		Debug.Log(b_JumpFlag);
 		
     }
 

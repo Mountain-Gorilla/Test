@@ -18,7 +18,7 @@ public class Breath : MonoBehaviour
 
 	public bool IsActive() { return b_ActiveFlag; }
 
-	void Start()
+	void Awake()
 	{
 		g_Boss = GameObject.Find("Boss");
 		g_Direction = g_Boss.GetComponent<Direction>();
@@ -56,14 +56,11 @@ public class Breath : MonoBehaviour
 		transform.Translate(n_IsReflection * -g_Direction.IsDirection() * v_Direct.x * f_Speed, n_IsReflection * v_Direct.y * f_Speed, 0.0f);
     }
 
-	void OnTriggerEnter2D(Collider2D _collider)
+	void OnCollisionEnter2D(Collision2D _collider)
 	{
-		if(_collider.gameObject.tag == "Player") {
-			b_ActiveFlag = false;
-		}
-
 		if(_collider.gameObject.tag == "Reflection") {
 			n_IsReflection = -1;
+			Debug.Log("跳ね返った");
 		}
 
 		if (_collider.gameObject.tag == "TileMap")
@@ -71,4 +68,36 @@ public class Breath : MonoBehaviour
 			b_ActiveFlag = false;
 		}
 	}
+
+	void OnTriggerEnter2D(Collider2D _collider)
+	{
+
+		if (_collider.gameObject.tag == "Reflection")
+		{
+			n_IsReflection = -1;
+			Debug.Log("跳ね返った");
+		}
+
+		if (_collider.gameObject.tag == "TileMap")
+		{
+			b_ActiveFlag = false;
+		}
+	}
+
+
+	void OnTriggerStay2D(Collider2D _collider)
+	{
+		if (_collider.gameObject.tag == "Player")
+		{
+			//b_ActiveFlag = false;
+		}
+	}
+
+	//void OnCollisionEnter2D(Collision2D _collision)
+	//{
+	//	if (_collision.gameObject.tag == "Reflection") {
+	//		n_IsReflection = -1;
+	//	}
+	//}
+
 }

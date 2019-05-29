@@ -8,6 +8,10 @@ public class EnemyDamage : MonoBehaviour
     private Rigidbody2D     ri_Physic;
     private EnemyState      es_State;                   //ステータス
 
+	[SerializeField]
+	private GameObject g_RushEffect;
+	private Rush       r_Script;
+
     private float           f_Blow;                     //吹き飛び値
     private float           f_StanProg;                 //スタン経過時間
 
@@ -19,6 +23,8 @@ public class EnemyDamage : MonoBehaviour
         g_Parent = transform.root.gameObject;
         ri_Physic = g_Parent.GetComponent<Rigidbody2D>();
         es_State = g_Parent.GetComponent<EnemyState>();
+		r_Script = g_RushEffect.GetComponent<Rush>();
+		g_RushEffect.SetActive(false);
 
         f_Blow = 0.0f;
         f_StanProg = 0.0f;
@@ -32,6 +38,8 @@ public class EnemyDamage : MonoBehaviour
 
         f_StanProg += Time.deltaTime;
 
+		
+
         //吹き飛び値一定以下で怯み終了
         if (f_StanProg > es_State.f_StanSpan && es_State.b_OnGround == true){
 
@@ -43,7 +51,9 @@ public class EnemyDamage : MonoBehaviour
 
             //ヒットボックス判定をON
             this.GetComponent<BoxCollider2D>().enabled = true;
-        }
+
+			if (g_RushEffect.activeSelf) g_RushEffect.SetActive(false);
+		}
     }
 
     void OnTriggerEnter2D(Collider2D _collider)
@@ -73,6 +83,10 @@ public class EnemyDamage : MonoBehaviour
 
             //ヒットボックス判定をOFF
             this.GetComponent<BoxCollider2D>().enabled = false;
+
+			if(_collider.gameObject.name == "Taurus") {
+				g_RushEffect.SetActive(true);
+			}
 
         }
 

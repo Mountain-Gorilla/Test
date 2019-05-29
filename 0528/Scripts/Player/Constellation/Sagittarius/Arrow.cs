@@ -8,8 +8,12 @@ public class Arrow : MonoBehaviour
 	private const float cf_Speed = 10.0f;    // 矢の速度
 
 	// プレイヤーの情報取得
+	[SerializeField]
 	private GameObject g_Player;
-	private Player     g_Script;
+
+	[SerializeField]
+	private Player g_Script;
+
 
 	private GameObject g_Sagittarius;
 
@@ -20,9 +24,6 @@ public class Arrow : MonoBehaviour
 	void Start()
 	{
 		//g_Right2D = GetComponent<Rigidbody2D>();
-
-		g_Player = GameObject.Find("Player");
-		g_Script = g_Player.GetComponent<Player>();
 
 		g_Sagittarius = GameObject.Find("Sagittarius");
 		transform.position = g_Sagittarius.transform.position;

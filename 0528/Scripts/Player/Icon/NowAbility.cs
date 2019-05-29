@@ -23,7 +23,13 @@ public class NowAbility : MonoBehaviour
 	private int       n_NextAbility;
 	private const int cn_None = 12;
 
+	// 能力発動する配列番号(双子座用)
+	private int n_ArrayAbility;
+
 	public void SharingAbility(int _ability) { n_NextAbility = _ability; }
+
+	// 双子座用
+	public int SharingGeminiAttackNum() { return n_ArrayAbility; }
 
 	public int GetNowAbility() { return n_NowSetAbility; }
 	public Sprite GetNowSprite() { return ls_Ability[n_NowSetAbility]; }
@@ -33,6 +39,7 @@ public class NowAbility : MonoBehaviour
     {
 		n_NowSetAbility = cn_None;
 		n_NextAbility = cn_None;
+		n_ArrayAbility = cn_None;
 
 		i_IconSprite = this.GetComponent<Image>();
 		i_IconSprite.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
@@ -44,15 +51,15 @@ public class NowAbility : MonoBehaviour
 		if (n_NextAbility == n_NowSetAbility) return;
 
 		// 予期していない値が入らないように
-		int ability_next_num = IsUseIcon(n_NextAbility);
-		if (ability_next_num == cn_None) return;
+		n_ArrayAbility = IsUseIcon(n_NextAbility);
+		if (n_ArrayAbility == cn_None) return;
 
 		// 今使える能力をステージに落とす
 		int now_ability = IsUseIcon(n_NowSetAbility);
 		if (now_ability != cn_None) lac_Ability[now_ability].AbilityRelease();
 
 		n_NowSetAbility = n_NextAbility;
-		i_IconSprite.sprite = ls_Ability[ability_next_num];
+		i_IconSprite.sprite = ls_Ability[n_ArrayAbility];
 		i_IconSprite.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
