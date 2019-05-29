@@ -9,6 +9,10 @@ public class Capricorn : MonoBehaviour
 	private Rigidbody2D g_Rigit2D;     // ジャンプの処理用
 	private const float f_JumpForce = 900.0f;    // ジャンプ力
 
+	[SerializeField]
+	private GameObject g_Jump;
+	private Effect e_JumpEffect;
+
 	private bool b_JumpFlag;
 	
     // Start is called before the first frame update
@@ -17,11 +21,16 @@ public class Capricorn : MonoBehaviour
 		g_Player = GameObject.Find("Player");
 		g_Script = g_Player.GetComponent<Player>();
 		g_Rigit2D = g_Player.GetComponent<Rigidbody2D>();
+
+		e_JumpEffect = g_Jump.GetComponent<Effect>();
+		g_Jump.SetActive(false);
+
 		b_JumpFlag = false;
 	}
 
     void OnEnable()
 	{
+		g_Jump.SetActive(false);
 		b_JumpFlag = false;
 	}
 
@@ -31,9 +40,15 @@ public class Capricorn : MonoBehaviour
 		if(Input.GetKeyDown(KeyCode.Space) && !b_JumpFlag && g_Script.IsJump()) {
 			g_Rigit2D.AddForce(transform.up * f_JumpForce);
 			g_Script.MortionJump();
+			g_Jump.SetActive(true);
 			b_JumpFlag = true;
 		}
 
+		if (g_Jump.activeSelf && e_JumpEffect.IsAnimeEnd()) {
+			g_Jump.SetActive(false);
+			b_JumpFlag = false;
+		}
+	
 		Debug.Log(b_JumpFlag);
     }
 

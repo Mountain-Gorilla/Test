@@ -26,7 +26,7 @@ public class Libra : MonoBehaviour
 
 	void OnEnable()
 	{
-		Vector3 position = new Vector3(g_Player.transform.position.x + g_PlayerScript.IsDirection() * 5.0f, g_Player.transform.position.y + cf_FallDistance, 0);
+		Vector3 position = new Vector3(g_Player.transform.position.x + g_PlayerScript.IsDirection() * 3.0f, g_Player.transform.position.y + cf_FallDistance, 0);
 		transform.position = position;
 
 		f_Fall = 0.0f;

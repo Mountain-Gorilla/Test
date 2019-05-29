@@ -20,8 +20,17 @@ public class BossState : MonoBehaviour
 
     GameObject g_Player;
     GameObject g_Cam;
+    GameObject g_Boss;
 
-    int i_AnimeNum = 0;
+    // クリア時
+    float f_Timer=0.0f;
+    bool b_GameClear;
+
+
+    public bool IsGameClear()
+    {
+        return g_Boss.GetComponent<BossManager>().IsGameClear();
+    }
     /*========================================*/
     // 初期化
     /*========================================*/
@@ -31,6 +40,8 @@ public class BossState : MonoBehaviour
         g_Cam = GameObject.Find("Main Camera");
 
         g_Player = GameObject.Find("Player");
+
+        g_Boss = GameObject.Find("BossManager");
     }
 
     float m_AnimNum = 0.0f;

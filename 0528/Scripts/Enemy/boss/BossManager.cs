@@ -4,17 +4,25 @@ using UnityEngine;
 
 public class BossManager : MonoBehaviour
 {
-    [SerializeField] private GameObject[] BossList;
+    enum Boss
+    {
+        Snake,
+        Club
+    };
+
+
+    [SerializeField]
+    private int i_LastBossNum = 2;
+    [SerializeField]
+        private GameObject[] BossList;
     int i_BossNum = 0;
-    GameObject Boss;
+    GameObject g_Boss;
 
     GameObject g_Cam;
     void Start()
     {
-        Boss = Instantiate(BossList[i_BossNum]);
-        Boss.name = ("Boss");
-        i_BossNum++;
-
+        g_Boss = Instantiate(BossList[i_BossNum]);
+        g_Boss.name = ("Boss");
         g_Cam = GameObject.Find("Main Camera");
 
     }
@@ -22,14 +30,26 @@ public class BossManager : MonoBehaviour
     void Update()
     {
 
-        if (g_Cam.transform.position.x - 20.0f > Boss.transform.position.x)
+        if (g_Cam.transform.position.x - 20.0f > g_Boss.transform.position.x)
         {
-            Destroy(Boss);
-            Boss = Instantiate(BossList[i_BossNum]);
-            Boss.name = ("Boss");
+            Destroy(g_Boss);
             i_BossNum++;
+            if (i_BossNum >= i_LastBossNum) return;
+            g_Boss = Instantiate(BossList[i_BossNum]);
+            g_Boss.name = ("Boss");
         }
+    }
 
+    // クリア時
+    float f_Timer = 0.0f;
+
+
+    public bool IsGameClear()
+    {
+        f_Timer += Time.deltaTime;
+        if (f_Timer <= 1.0f) return false;
+        if (i_BossNum < i_LastBossNum) return false;
+        return true;
     }
 
 }

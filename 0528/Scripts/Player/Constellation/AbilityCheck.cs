@@ -92,7 +92,7 @@ public class AbilityCheck : MonoBehaviour
 			b_GetAbility = true;
 			na_IconUI.SharingAbility(n_ConAbilityNum);
 			g_sr.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
-
+			Debug.Log("取得");
 		}
 	}
 
@@ -100,6 +100,10 @@ public class AbilityCheck : MonoBehaviour
 	{
 		if(_collision.gameObject.tag == "TileMap") {
 			rb_Body.velocity = new Vector2(0.0f, 0.0f);
+			col_CircleTrigger.isTrigger = true;
+		}
+
+        if(_collision.gameObject.tag == "Player") {
 			col_CircleTrigger.isTrigger = true;
 		}
 	}

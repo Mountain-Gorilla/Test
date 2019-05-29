@@ -37,10 +37,16 @@ public class Scene : MonoBehaviour
     private float f_Dis = 0.0f;
     private int i_Cnt = 0;
     private bool b_Start = false;
+    public bool GetStart() { return b_Start; }
 
     void Update()
     {
         if (!b_Start) return;
+        if (g_Boss.transform.position.y < g_Player.transform.position.y)
+        {
+            return;
+        }
+        g_Cam.GetComponent<Camera>().enabled = false;
 
         if (i_Cnt > CNT_MAX)
         {
@@ -81,8 +87,8 @@ public class Scene : MonoBehaviour
         b_Start = false;
         this.gameObject.GetComponent<Rigidbody2D>().simulated = true;
 
-
-        Destroy(this);
+        this.enabled = false;
+        //Destroy(this);
     }
 
     void OnTriggerEnter2D(Collider2D col)
@@ -90,7 +96,6 @@ public class Scene : MonoBehaviour
         //Playerと接触した時
         if (col.tag == "Player")
         {
-            g_Cam.GetComponent<Camera>().enabled = false;
             g_HpBar.GetComponent<Image>().enabled = false;
             g_Player.GetComponent<Animator>().Play("Move");
             g_Player.GetComponent<Player>().enabled = false;

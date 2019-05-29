@@ -10,6 +10,8 @@ public class Dish : MonoBehaviour
 	// 下がっているか
 	private bool b_DownFlag = false;
 
+	private bool b_OnDish;
+
 	// 当たり判定の回数を減らす(タイマーで)
 	private float       f_HitDerayTimer = 0.0f;
 	private const float cf_DerayTime = 0.3f;    // 遅延秒数
@@ -26,6 +28,7 @@ public class Dish : MonoBehaviour
 
 	void OnEnable()
 	{
+		b_OnDish = false;
 		b_DownFlag = false;
 		f_HitDerayTimer = 0.0f;
 	}
@@ -40,13 +43,22 @@ public class Dish : MonoBehaviour
 
 	void OnCollisionEnter2D(Collision2D _collision)
 	{
-		b_DownFlag = true;
-		if(f_HitDerayTimer > cf_DerayTime) f_HitDerayTimer = 0.0f;
+		if (_collision.gameObject.tag == "Player" && b_OnDish){
+			b_DownFlag = true;
+			if (f_HitDerayTimer > cf_DerayTime) f_HitDerayTimer = 0.0f;
+		}
 	}
 
 	void OnCollisionExit2D(Collision2D _collision)
 	{
 		if (f_HitDerayTimer < cf_DerayTime) return;
 		b_DownFlag = false;
+	}
+
+	void OnTriggerEnter2D(Collider2D _collider)
+	{
+		if (_collider.gameObject.tag == "Player") {
+			b_OnDish = true;
+		}
 	}
 }

@@ -16,5 +16,7 @@ public class Direction : MonoBehaviour
 		n_LeftRightFlag = (int)Direct.Left;
 	}
 
+	public void ReSetDirection() { n_LeftRightFlag = (int)Direct.Right; }
+
    
 }

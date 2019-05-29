@@ -42,6 +42,7 @@ public class Taurus : MonoBehaviour
     /*=============================================*/
     void OnEnable()
     {
+		g_Rush.SetActive(true);
 		b_WallJudge = false;
         b_ActiveFlg = false;
         f_Timer = 0.0f;
@@ -81,14 +82,14 @@ public class Taurus : MonoBehaviour
 
 		//硬直終了時
 		if ((f_Timer > cf_Wait) && b_ActiveFlg == false) {
-			g_Rush.SetActive(true);
             b_ActiveFlg = true;
             f_Timer = 0.0f;
         }
 
         ////能力発動終了時
         if ((f_Timer > cf_Active) && b_ActiveFlg == true) {
-            b_ActiveFlg = false;
+			g_Rush.SetActive(true);
+			b_ActiveFlg = false;
             f_Timer = 0.0f;
         }
 
