@@ -6,7 +6,7 @@ public class TransformationDirector : MonoBehaviour
 {
 	// 本体
 	[SerializeField]
-	GameObject g_Transformation;
+	GameObject g_Transformation = default;
 	Animator an_Change;
 	SpriteChange sc_Script;
 

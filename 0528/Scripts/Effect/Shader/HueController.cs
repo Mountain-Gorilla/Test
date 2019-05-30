@@ -26,14 +26,15 @@ public class HueController : MonoBehaviour
 
 		if (b_Up)
 		{
-			brightness += once;
-			if (brightness >= 1.0f) b_Up = false;
+			brightness = 1;
+			//if (brightness >= 1.0f) b_Up = false;
+			b_Up = false;
 		}
 
 		else
 		{
 			brightness -= once;
-			if (brightness <= 0.5f) b_Up = true;
+			//if (brightness <= 0.5f) b_Up = true;
 		}
 
 		// 確認用　左右キーで切り替えます

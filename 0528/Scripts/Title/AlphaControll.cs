@@ -5,7 +5,7 @@ using UnityEngine;
 public class AlphaControll : MonoBehaviour
 {
 	[SerializeField]
-	SpriteRenderer sr_Alpha;
+	SpriteRenderer sr_Alpha = default;
 
 	[SerializeField]
 	float f_AlphaOnce = 0.01f;

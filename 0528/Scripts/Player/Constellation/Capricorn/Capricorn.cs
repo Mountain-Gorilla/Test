@@ -10,7 +10,7 @@ public class Capricorn : MonoBehaviour
 	private const float f_JumpForce = 900.0f;    // ジャンプ力
 
 	[SerializeField]
-	private GameObject g_Jump;
+	private GameObject g_Jump = default;
 	private Effect e_JumpEffect;
 
 	private bool b_JumpFlag;

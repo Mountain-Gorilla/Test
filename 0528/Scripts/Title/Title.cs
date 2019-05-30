@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class Title : MonoBehaviour
 {
 	[SerializeField]
-	GameObject g_Fade;
+	GameObject g_Fade = default;
 	FadeActive fa_IsCheck;
 
 	private bool b_FadeFlag;
@@ -30,6 +30,7 @@ public class Title : MonoBehaviour
 		if (b_FadeFlag && fa_IsCheck.IsFadeFinish())
 		{
 			b_FadeFlag = false;
+			fa_IsCheck.EveryTimeOnFadeIn();
 
 			SceneManager.LoadScene("ForestScene");
 		}

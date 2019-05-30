@@ -9,10 +9,11 @@ public class EnemyDamage : MonoBehaviour
     private EnemyState      es_State;                   //ステータス
 
 	[SerializeField]
-	private GameObject g_RushEffect;
-	private Rush       r_Script;
+	private GameObject g_RushEffect = default;
 
-    private float           f_Blow;                     //吹き飛び値
+	private AudioSource[] as_Sound;
+
+	private float           f_Blow;                     //吹き飛び値
     private float           f_StanProg;                 //スタン経過時間
 
 
@@ -23,10 +24,11 @@ public class EnemyDamage : MonoBehaviour
         g_Parent = transform.root.gameObject;
         ri_Physic = g_Parent.GetComponent<Rigidbody2D>();
         es_State = g_Parent.GetComponent<EnemyState>();
-		r_Script = g_RushEffect.GetComponent<Rush>();
 		g_RushEffect.SetActive(false);
 
-        f_Blow = 0.0f;
+		as_Sound = GetComponents<AudioSource>();
+
+		f_Blow = 0.0f;
         f_StanProg = 0.0f;
 	}
 	
@@ -84,6 +86,8 @@ public class EnemyDamage : MonoBehaviour
             //ヒットボックス判定をOFF
             this.GetComponent<BoxCollider2D>().enabled = false;
 
+			as_Sound[0].Play();
+
 			if(_collider.gameObject.name == "Taurus") {
 				g_RushEffect.SetActive(true);
 			}
@@ -91,7 +95,7 @@ public class EnemyDamage : MonoBehaviour
         }
 
         //毒攻撃
-        if (_collider.gameObject.tag == "Scorpio"){
+        if (_collider.gameObject.name == "Scorpio"){
             if (es_State.n_Condition == 0){
                 //毒状態に
                 es_State.n_Condition = 1;

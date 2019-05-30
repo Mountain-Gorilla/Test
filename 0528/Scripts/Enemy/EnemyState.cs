@@ -26,7 +26,9 @@ public class EnemyState : MonoBehaviour
     private float f_ConditionTimer = 0.0f;  //状態異常タイマー
     private Animator an_Motion;
 
-    GameObject g_Player;
+	private AudioSource[] as_Sound;
+
+	GameObject g_Player;
 
     /*========================================*/
     // 初期化
@@ -40,7 +42,9 @@ public class EnemyState : MonoBehaviour
 
         //プレイヤー取得
         g_Player = GameObject.Find("Player");
-    }
+
+		as_Sound = GetComponents<AudioSource>();
+	}
 
     /*========================================*/
     // 更新
@@ -59,6 +63,7 @@ public class EnemyState : MonoBehaviour
         if (f_Hp <= 0)
         {
             an_Motion.SetBool("Alive", false);
+			as_Sound[1].Play();
             b_Alive = false;
         }
 
@@ -107,6 +112,7 @@ public class EnemyState : MonoBehaviour
             //攻撃
             case 2:
                 an_Motion.SetInteger("State", 2);
+				as_Sound[0].Play();
                 break;
             //怯み
             case 3:

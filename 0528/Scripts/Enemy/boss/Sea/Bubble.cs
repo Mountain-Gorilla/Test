@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class Bubble : MonoBehaviour
 {
-    Animator Ani_Bubble;
-    private void Start()
+    // Start is called before the first frame update
+    void Start()
     {
-        Ani_Bubble = GetComponent<Animator>();
+        
     }
 
-    private void Update()
+    // Update is called once per frame
+    void Update()
     {
-        if(Ani_Bubble.GetCurrentAnimatorStateInfo(0).normalizedTime>1.0f)
-        {
-            Destroy(this.gameObject);
-        }
+        
     }
 }

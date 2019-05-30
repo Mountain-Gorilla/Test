@@ -9,10 +9,10 @@ public class Arrow : MonoBehaviour
 
 	// プレイヤーの情報取得
 	[SerializeField]
-	private GameObject g_Player;
+	private GameObject g_Player = default;
 
 	[SerializeField]
-	private Player g_Script;
+	private Player g_Script = default;
 
 
 	private GameObject g_Sagittarius;
@@ -23,8 +23,6 @@ public class Arrow : MonoBehaviour
 	// 初期化
 	void Start()
 	{
-		//g_Right2D = GetComponent<Rigidbody2D>();
-
 		g_Sagittarius = GameObject.Find("Sagittarius");
 		transform.position = g_Sagittarius.transform.position;
 

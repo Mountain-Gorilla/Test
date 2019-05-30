@@ -49,16 +49,7 @@ public class IconChange : MonoBehaviour
 	// 選択する能力の変更
 	public int ChangeIcon()
 	{
-		if (Input.GetKeyDown(KeyCode.Z)) {
-			n_NextState = CheckAbility(n_NextState, false);
-		}
-
-		else if (Input.GetKeyDown(KeyCode.C)) {
-			n_NextState = CheckAbility(n_NextState, true);
-		}
-
 		return n_NextState;
-
 	}
 
 	// 能力があるかどうか

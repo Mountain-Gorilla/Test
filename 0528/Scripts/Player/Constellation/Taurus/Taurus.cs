@@ -5,12 +5,12 @@ using UnityEngine;
 public class Taurus : MonoBehaviour
 {
 	[SerializeField]
-	private GameObject g_Player;
+	private GameObject g_Player = default;
 
 	[SerializeField]
-	private Player g_Script;
+	private Player g_Script = default;
 
-	private Animator an_Rush;
+	private Animator an_Rush = default;
 
 	//private GameObject g_Rush;
 
@@ -27,7 +27,7 @@ public class Taurus : MonoBehaviour
     /*=============================================*/
     // 初期化
     /*=============================================*/
-    void Start()
+    void Awake()
     {
 		an_Rush = g_Player.GetComponent<Animator>();
 

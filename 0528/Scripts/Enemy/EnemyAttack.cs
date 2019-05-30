@@ -7,10 +7,10 @@ public class EnemyAttack : MonoBehaviour
     private Rigidbody2D ri_Pysic;
     private EnemyState es_EnemyState;
 
-    /*===============================*/
-    // 初期化
-    /*===============================*/
-    void Start()
+	/*===============================*/
+	// 初期化
+	/*===============================*/
+	void Start()
     {
         ri_Pysic = this.GetComponent<Rigidbody2D>();
         es_EnemyState = this.GetComponent<EnemyState>();

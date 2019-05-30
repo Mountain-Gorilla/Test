@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Anime : MonoBehaviour
 {
-    private SpriteRenderer NowSprite;
+	private SpriteRenderer NowSprite = default;
     public Sprite[] Constellation;
-    private Sprite None;
+	private Sprite None = default;
 
     void Awake()
     {

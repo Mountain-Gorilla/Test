@@ -19,7 +19,8 @@ public class Pop : MonoBehaviour
     {
         if (b_Pop == false) return;
         f_animetime = an_Mortion.GetCurrentAnimatorStateInfo(0).normalizedTime;
-  
+        Debug.Log(i_Cnt);
+
         if (f_animetime > 1.0f && i_Cnt<5)
         {
             an_Mortion.Play("Moth", -1, 0);
@@ -30,12 +31,13 @@ public class Pop : MonoBehaviour
         if(f_animetime>1.0f&&i_Cnt>=5)
         {
             an_Mortion.Play("Waiting");
+            GetComponent<ForestBoss>().enabled = true;
             GetComponent<Pop>().enabled = false;
             b_Pop = false;
-            GameObject g_manager = this.gameObject;
+            GameObject g_manager = GameObject.Find("Mana");
             g_manager.GetComponent<Scene>().End();
-            this.GetComponent<Pop>().enabled = false;
-            //Destroy(this);
+
+            Destroy(this);
             return;
         }
 

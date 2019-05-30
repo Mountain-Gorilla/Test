@@ -24,7 +24,7 @@ public class Lever : MonoBehaviour
 	public float InverseRotate() { return -f_NowRotate; }
 
 	// Start is called before the first frame update
-	void Start()
+	void Awake()
 	{
 
 		OnEnable();
@@ -119,8 +119,6 @@ public class Lever : MonoBehaviour
 	// 指定角度まで回転
 	void RotateAngle(float _start,float _end)
 	{
-		//f_RotateTimer += n_InclineState != (int)InclineDirection.None ? cf_TimerOnce : -cf_TimerOnce / 2.0f;
-
 		float rot_timer = 0.0f;
 		if (n_InclineState <= (int)InclineDirection.Right) rot_timer = cf_TimerOnce;
 		else if (n_InclineState == (int)InclineDirection.None) rot_timer = -cf_TimerOnce;
@@ -139,7 +137,7 @@ public class Lever : MonoBehaviour
 		//Debug.Log(f_NowRotate);
 		//Debug.Log(f_RotateTimer);
 		//Debug.Log(n_InclineState);
-		//Debug.Log(g_DishScript[(int)InclineDirection.Left].IsDown());
-		//Debug.Log(g_DishScript[(int)InclineDirection.Right].IsDown());
+		Debug.Log("Left : " + g_DishScript[(int)InclineDirection.Left].IsDown());
+		Debug.Log("Right : " + g_DishScript[(int)InclineDirection.Right].IsDown());
 	}
 }

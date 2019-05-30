@@ -9,7 +9,7 @@ public class Sagittarius : MonoBehaviour
 	private GameObject g_Arrow;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
 		g_Arrow = GameObject.Find("Arrow");
 		g_Arrow.SetActive(true);

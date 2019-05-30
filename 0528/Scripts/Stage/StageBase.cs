@@ -13,11 +13,11 @@ public class StageBase : MonoBehaviour
 	private Player p_Script;
 
 	[SerializeField]
-	GameObject g_Boss;
+	GameObject g_Boss = default;
 	BossState  bs_IsAlive;
 
 	[SerializeField]
-	FadeActive fa_IsCheck;
+	FadeActive fa_IsCheck = default;
 	private bool b_FadeOut;
 	private bool b_FadeIn;
 
@@ -34,8 +34,7 @@ public class StageBase : MonoBehaviour
 		v_StartPlayerPos = g_Player.transform.position;
 		p_Script = g_Player.GetComponent<Player>();
 
-        g_Boss = GameObject.Find("Boss");
-        bs_IsAlive = g_Boss.GetComponent<BossState>();
+		bs_IsAlive = g_Boss.GetComponent<BossState>();
 
 		b_FadeOut = true;
 		b_FadeIn = false;
@@ -57,13 +56,19 @@ public class StageBase : MonoBehaviour
 			//SceneManager.LoadScene("ForestScene");
 		}
 
-		//Debug.Log("Clear : " + b_FadeIn);
+		Debug.Log("Clear : " + b_FadeIn);
 
 		if (b_FadeIn && fa_IsCheck.IsFadeFinish())
 		{
 			b_FadeIn = false;
 
-			SceneManager.LoadScene("TitleScene");
+			if(bs_IsAlive.IsGameClear()) SceneManager.LoadScene("TitleScene");
+
+			if (!p_Script.IsAlive()) {
+				p_Script.ReSpawn();
+				b_FadeOut = true;
+				fa_IsCheck.FadeOut();
+			}
 		}
 
 		if (b_FadeOut && fa_IsCheck.IsFadeFinish()) {

@@ -17,7 +17,7 @@ public class Pisces : MonoBehaviour
     public bool RightStep; //右回避フラグ
     public bool LeftStep; //左回避フラグ
 
-    void Start()
+    void Awake()
     {
         g_Player = GameObject.Find("Player");
         f_Timer = 0.0f;

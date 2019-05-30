@@ -13,7 +13,7 @@ public class Aries : MonoBehaviour
 
 	private AnimeEnd ae_Effect;
 	[SerializeField]
-	private Animator an_Effect;
+	private Animator an_Effect = default;
 
     public float HealAmount = 1f; //回復量
     public float Limit = 0;
@@ -32,7 +32,6 @@ public class Aries : MonoBehaviour
         g_HP = GameObject.Find("HP");
         AriesHeal = GameObject.Find("AriesHeal");
         AriesHeal.SetActive(false);
-		//g_AriesHeal = AriesHeal.GetComponent<AriesHeal>;
 		ae_Effect = gameObject.GetComponent<AnimeEnd>();
         f_Timer = 0.0f;
     }

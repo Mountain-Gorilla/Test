@@ -8,29 +8,29 @@ public class AbilityCheck : MonoBehaviour
 	public int   n_ConAbilityNum;
 	private bool b_GetAbility;
 
-	private GameObject g_IconDirector;
-	private IconDirector id_IconChange;
+	private GameObject g_IconDirector = default;
+	private IconDirector id_IconChange = default;
 
-	private GameObject g_Player;
-	private Player g_PlayerScript;
+	private GameObject g_Player = default;
+	private Player g_PlayerScript = default;
 
 	// 自身のコンポーネントを参照
-	private Rigidbody2D rb_Body;
+	private Rigidbody2D rb_Body = default;
 
 	[SerializeField]
-	private Collider2D col_CircleTrigger;
+	private Collider2D col_CircleTrigger = default;
 
 	[SerializeField]
-	private GameObject g_BoxCollider;
-	private IconGroundJudge igj_Script;
+	private GameObject g_BoxCollider = default;
+	private IconGroundJudge igj_Script = default;
 
-	private SpriteRenderer g_sr;     // スプライト操作
+	private SpriteRenderer g_sr = default;     // スプライト操作
 
 	// UIオブジェクトへの参照
 	[SerializeField]
-	GameObject g_IconUI;
+	GameObject g_IconUI = default;
 
-	NowAbility na_IconUI;
+	NowAbility na_IconUI = default;
 
 	// 能力が使えるかどうか
 	public int IsUseAbility()

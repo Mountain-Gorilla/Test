@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class IconGauge : MonoBehaviour
 {
 	[SerializeField]
-	GameObject g_Ability;
+	GameObject g_Ability = default;
 
 	// Start is called before the first frame update
 	void Start()

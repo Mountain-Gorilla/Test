@@ -53,12 +53,20 @@ public class Dish : MonoBehaviour
 	{
 		if (f_HitDerayTimer < cf_DerayTime) return;
 		b_DownFlag = false;
+		b_OnDish = false;
 	}
 
 	void OnTriggerEnter2D(Collider2D _collider)
 	{
 		if (_collider.gameObject.tag == "Player") {
 			b_OnDish = true;
+		}
+	}
+
+	void OnTriggerExit2D(Collider2D _collider)
+	{
+		if (_collider.gameObject.tag == "Player") {
+			b_OnDish = false;
 		}
 	}
 }

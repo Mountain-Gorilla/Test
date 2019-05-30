@@ -18,7 +18,7 @@ public class FlushController : MonoBehaviour
 	public void OnFlag() { b_HitFlag = true; }
 	public void DestoryFlag() { b_HitFlag = false; }
 
-    void Start()
+    void Awake()
     {
 		g_Camera = GameObject.Find("Main Camera");
 
@@ -36,7 +36,8 @@ public class FlushController : MonoBehaviour
         {
             // 被弾時赤くします　第1,4引数で赤みを変更できます
             g_sr.color = new Color(0.5f, 0f, 0f, 0.5f);
-            // ※被弾判定を切ってください※
+			// ※被弾判定を切ってください※
+			b_HitFlag = false;
 
         }
         else

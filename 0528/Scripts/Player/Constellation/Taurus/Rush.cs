@@ -5,14 +5,13 @@ using UnityEngine;
 public class Rush : MonoBehaviour
 {
 	[SerializeField]
-	private Animator an_Rush;
+	private Animator an_Rush = default;
 
 	AnimeEnd ae_Check;
 
 	// Start is called before the first frame update
 	void Start()
     {
-		//an_Rush = GetComponent<Animator>();
 		ae_Check = this.gameObject.GetComponent<AnimeEnd>();
 		OnEnable();
 	}

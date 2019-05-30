@@ -5,14 +5,13 @@ using UnityEngine;
 public class Scorpio : MonoBehaviour
 {
 	[SerializeField]
-	Animator an_Needle;
+	Animator an_Needle = default;
 
 	[SerializeField]
-	private GameObject g_Player;
+	private GameObject g_Player = default;
 
 	[SerializeField]
-	private Player p_Script;
-
+	private Player p_Script = default;
 
 	// 拡縮用
 	float f_Scale = 2.0f;

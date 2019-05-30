@@ -9,7 +9,7 @@ public class IconHalf : MonoBehaviour
 {
 	// 発動時本体から受け取る情報を格納
 	[SerializeField]
-	private GameObject g_IconHalf;
+	private GameObject g_IconHalf = default;
 	private Image      i_Sprite;
 
 	void Start()

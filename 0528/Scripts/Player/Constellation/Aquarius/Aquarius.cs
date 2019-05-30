@@ -5,7 +5,7 @@ using UnityEngine;
 public class Aquarius : MonoBehaviour
 {
 	[SerializeField]
-	Animator an_Effect;
+	Animator an_Effect = default;
 	SpriteRenderer sr_Sprite;
 
 	AnimeEnd ae_Check;

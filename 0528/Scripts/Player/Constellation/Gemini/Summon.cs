@@ -6,7 +6,7 @@ public class Summon : MonoBehaviour
 {
 
 	[SerializeField]
-	Animator an_Effect;
+	Animator an_Effect = default;
 
 	AnimeEnd ae_Check;
 

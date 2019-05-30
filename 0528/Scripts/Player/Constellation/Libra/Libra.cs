@@ -14,7 +14,7 @@ public class Libra : MonoBehaviour
 	private const float cf_FallDistance = 10.0f;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
 		g_Player = GameObject.Find("Player");
 		g_PlayerScript = g_Player.GetComponent<Player>();
@@ -26,7 +26,8 @@ public class Libra : MonoBehaviour
 
 	void OnEnable()
 	{
-		Vector3 position = new Vector3(g_Player.transform.position.x + g_PlayerScript.IsDirection() * 3.0f, g_Player.transform.position.y + cf_FallDistance + 2.0f, 0);
+		Vector3 position = new Vector3(g_Player.transform.position.x + g_PlayerScript.IsDirection() * 0.5f, 
+			                           g_Player.transform.position.y + cf_FallDistance + 2.0f, 0);
 		transform.position = position;
 
 		f_Fall = 0.0f;

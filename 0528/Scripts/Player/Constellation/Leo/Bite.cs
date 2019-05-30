@@ -5,13 +5,13 @@ using UnityEngine;
 public class Bite : MonoBehaviour
 {
 	[SerializeField]
-	private GameObject g_Player;
+	private GameObject g_Player = default;
 
 	[SerializeField]
-	private Player g_Script;
+	private Player g_Script = default;
 
 	// アニメーション
-	private Animator an_Bite;
+	private Animator an_Bite = default;
 	private bool b_Animation = false;
 
 	public bool IsAnimation() { return b_Animation; }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class AnimeEnd : MonoBehaviour
 {
 	[SerializeField]
-	Animator an_Anime;
+	Animator an_Anime = default;
 
 	public bool IsAnimeEnd()
 	{

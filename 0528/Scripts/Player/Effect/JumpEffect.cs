@@ -5,10 +5,10 @@ using UnityEngine;
 public class JumpEffect : MonoBehaviour
 {
 	[SerializeField]
-	Animator an_Effect;
+	Animator an_Effect = default;
 
 	[SerializeField]
-	GameObject g_Player;
+	GameObject g_Player = default;
 
 	AnimeEnd ae_Check;
 

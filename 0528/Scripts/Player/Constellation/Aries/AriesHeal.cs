@@ -6,21 +6,19 @@ using UnityEngine.UI;
 public class AriesHeal : MonoBehaviour
 {
 	[SerializeField]
-    GameObject g_HPGauge;　//呼び出し
+	GameObject g_HPGauge = default; //呼び出し
 
 	[SerializeField]
-    HP g_HP;　//呼び出し
+	HP g_HP = default;　//呼び出し
     public float HealAmount = 1f; //ゲージ回復量
     public float HPHeal;//HP回復量
-    private float f_Timer = 0.0f;           //タイマー
-
+   
     /*=============================================*/
     // 初期化
     /*=============================================*/
     void Start()
     {
-       // g_HPGauge = GameObject.Find("HPGauge");
-        f_Timer = 0.0f;
+
     }
 
 	void OnEnable()

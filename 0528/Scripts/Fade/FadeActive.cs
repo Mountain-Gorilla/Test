@@ -6,31 +6,43 @@ public class FadeActive : MonoBehaviour
 {
 	public Fade fade;
 	[SerializeField]
-	FadeImage fi_Image;
+	FadeImage fi_Image = default;
 
 	[SerializeField]
-	bool b_UpDown;
+	bool b_FadeIn = default;
+
+	[SerializeField]
+	bool b_FadeOut = default;
+
 
 	[SerializeField]
 	private float f_FadeSpeed = 0.9f;
 
 	private bool b_FadeFinish = false;
 	
+	public void EveryTimeOnFadeIn() { b_FadeIn = true; }
 
 	public bool IsFadeFinish() { return b_FadeFinish; }
 
 	private void Update()
-	{		
-		if (b_UpDown && fi_Image.Range >= 1.0f) b_FadeFinish = true;
+	{
+		if (b_FadeIn && fi_Image.Range >= 1.0f) {
+			b_FadeFinish = true;
+			b_FadeOut = true;
+			b_FadeIn = false;
+		}
 
-		if (!b_UpDown && fi_Image.Range <= 0.0f) b_FadeFinish = true;
+		else if (b_FadeOut && fi_Image.Range <= 0.0f) {
+			b_FadeFinish = true;
+			b_FadeOut = false;
+			b_FadeIn = true;
+		}
+		else { b_FadeFinish = false; }
 	}
 
 	public void FadeIn()
 	{
 		fade.FadeIn(f_FadeSpeed);
-
-		//return true;
 	}
 
 	public void FadeOut()

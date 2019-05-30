@@ -5,13 +5,13 @@ using UnityEngine;
 public class GeminiDirector : MonoBehaviour
 {
 	[SerializeField]
-	GameObject g_Gemini;
+	GameObject g_Gemini = default;
 
 	[SerializeField]
 	List<GameObject> lg_Attack = new List<GameObject>();
 
 	[SerializeField]
-	NowAbility na_NowAbilityNumber;
+	NowAbility na_NowAbilityNumber = default;
 
 	const int cn_NoneAttack = 12;
 	int n_NextAttackAbility = cn_NoneAttack;

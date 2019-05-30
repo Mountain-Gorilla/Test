@@ -5,7 +5,7 @@ using UnityEngine;
 public class Virgo : MonoBehaviour
 {
 	[SerializeField]
-	Animator an_Charm;
+	Animator an_Charm = default;
 
 	// Start is called before the first frame update
 	void Start()
