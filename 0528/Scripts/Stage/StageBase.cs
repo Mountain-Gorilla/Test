@@ -34,7 +34,8 @@ public class StageBase : MonoBehaviour
 		v_StartPlayerPos = g_Player.transform.position;
 		p_Script = g_Player.GetComponent<Player>();
 
-		bs_IsAlive = g_Boss.GetComponent<BossState>();
+        g_Boss = GameObject.Find("Boss");
+        bs_IsAlive = g_Boss.GetComponent<BossState>();
 
 		b_FadeOut = true;
 		b_FadeIn = false;
@@ -56,7 +57,7 @@ public class StageBase : MonoBehaviour
 			//SceneManager.LoadScene("ForestScene");
 		}
 
-		Debug.Log("Clear : " + b_FadeIn);
+		//Debug.Log("Clear : " + b_FadeIn);
 
 		if (b_FadeIn && fa_IsCheck.IsFadeFinish())
 		{

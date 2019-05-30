@@ -16,7 +16,7 @@ public class HPDirector : MonoBehaviour
 	public void DecreaseHP(float _decrease,float _max)
     {
         g_HPGauge.GetComponent<Image>().fillAmount = (_decrease / _max);
-		Debug.Log(g_HPGauge.GetComponent<Image>().fillAmount);
+		//Debug.Log(g_HPGauge.GetComponent<Image>().fillAmount);
     }
 
     public void IncreaseHP(float _increase, float _max)

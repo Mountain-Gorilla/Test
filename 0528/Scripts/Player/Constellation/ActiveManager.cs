@@ -151,8 +151,15 @@ public class ActiveManager : MonoBehaviour
     // 更新
     void Update ()
     {
-		//AbilitySelect();
-		for (int i = 0; i < (int)AbilityKey.Max; i++){
+        GameObject g_Boss = GameObject.Find("Boss");
+        Scene s_BossScene = g_Boss.GetComponent<Scene>();
+        if (s_BossScene)
+        {
+            if (s_BossScene.GetStart()) return;
+        }
+
+        //AbilitySelect();
+        for (int i = 0; i < (int)AbilityKey.Max; i++){
 
 			SetAbility(i);
 
@@ -162,7 +169,7 @@ public class ActiveManager : MonoBehaviour
 
 			AbilityInterval(i);
 
-			Debug.Log(n_Status[i]);
+			//Debug.Log(n_Status[i]);
 		}
 
         //Debug.Log(n_Status);

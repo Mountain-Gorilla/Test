@@ -59,7 +59,7 @@ public class Player : MonoBehaviour
 	void Start()
     {
 		// 初期座標を設定
-		transform.position = new Vector3(-175.3f, -42.3f, 0.0f);
+		transform.position = new Vector3(100.3f, 100.3f, 0.0f);
 
 		b_JumpFlag = false;
 
@@ -258,7 +258,7 @@ public class Player : MonoBehaviour
 		//g_Move.ValueDraw();
 		//Debug.Log(n_MortionState);
 		//Debug.Log(g_right2D.velocity.y);
-		Debug.Log(b_JumpFlag);
+		//Debug.Log(g_HP.GetHp());
 		
     }
 
